@@ -1,8 +1,6 @@
-package com.hyperskill.accountservice.model;
+package com.hyperskill.accountservice.Model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 //@Data
 //@NoArgsConstructor
@@ -13,21 +11,10 @@ public class User {
     @Id
     @GeneratedValue(strategy =   GenerationType.AUTO)
     private long id;
-    @NotEmpty
     private String name;
-    @NotEmpty
     private String lastname;
-    @NotEmpty
     private String email;
-    @NotEmpty
     private String password;
-
-    public User(String name, String lastname, String email, String password) {
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-    }
 
     public long getId() {
         return id;
