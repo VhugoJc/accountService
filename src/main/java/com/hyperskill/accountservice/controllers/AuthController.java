@@ -2,7 +2,7 @@ package com.hyperskill.accountservice.controllers;
 
 
 import com.hyperskill.accountservice.models.User;
-import com.hyperskill.accountservice.payloads.UserDTO;
+import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.services.UserService;
 
 import org.modelmapper.ModelMapper;
@@ -16,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/auth")

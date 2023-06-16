@@ -1,4 +1,4 @@
-package com.hyperskill.accountservice.payloads;
+package com.hyperskill.accountservice.dtos;
 
 public class UserDTO {
     private Long id;
