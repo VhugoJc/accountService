@@ -8,14 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserService {
+public class UserService implements IUserService{
     @Autowired
     IUserRepository userRepository;
-
-    public ArrayList <User> getUsers(){
-        return (ArrayList<User>) userRepository.findAll();
-    }
-
     public User addUser(User newUser){
         return userRepository.save(newUser);
     }

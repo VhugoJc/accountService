@@ -1,25 +1,10 @@
-package com.hyperskill.accountservice.models;
+package com.hyperskill.accountservice.payloads;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "user")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private Long id;
     private String name;
     private String lastname;
-    private String password;
     private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public Long getId() {
         return id;
@@ -45,11 +30,11 @@ public class User {
         this.lastname = lastname;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

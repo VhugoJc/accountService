@@ -6,5 +6,4 @@ import java.util.ArrayList;
 
 public interface IUserService {
     public User addUser(User newUser);
-    public ArrayList<User> getUsers();
 }
