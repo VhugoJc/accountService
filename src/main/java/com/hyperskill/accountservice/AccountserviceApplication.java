@@ -5,9 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
-
 @SpringBootApplication()
-public class AccountserviceApplication {
+public class AccountserviceApplication  {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
