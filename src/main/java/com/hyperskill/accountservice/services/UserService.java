@@ -5,7 +5,6 @@ import com.hyperskill.accountservice.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +19,6 @@ public class UserService implements IUserService{
     public boolean emailValidation(String email) {
         String domain = "@acme.com";
         List<User> user =  userRepository.findByEmail(email);
-        System.out.println(user.size());
         if (user.size()!=0 || !email.contains(domain)){ // if the email exists or does not contain the domain
             return false;
         }else{

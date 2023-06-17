@@ -1,6 +1,7 @@
 package com.hyperskill.accountservice.controllers;
 
 
+import com.hyperskill.accountservice.exceptions.ErrorMessage;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.services.UserService;
@@ -28,6 +29,7 @@ public class AuthController implements IAuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> addUser(@Validated @RequestBody User newUser){
         if(!this.userService.emailValidation(newUser.getEmail())){ //if email validation fails
+            ErrorMessage.setErrorMsg("User exist!");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         UserDTO userResponse = this.modelMapper.map(this.userService.addUser(newUser),UserDTO.class);

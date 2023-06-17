@@ -1,5 +1,6 @@
 package com.hyperskill.accountservice.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+    @Autowired
+    RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -21,6 +24,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(auth->auth.authenticationEntryPoint(restAuthenticationEntryPoint))
         ;
 
         return http.build();
