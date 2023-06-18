@@ -3,65 +3,35 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+
+import java.util.List;
 
 
+@Data
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email","id"})}) //user is a reserved keyword from H2
+@Table(name="users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Column(name="user_id")
+    private Integer id;
 
-    @NotBlank(message = "name is required")
+    @Column(name="user_name")
     private String name;
 
-    @NotBlank(message = "lastname is required")
-    private String lastname;
-
-    @NotBlank(message = "password is required")
+    @Column(name="user_passwd")
     private String password;
 
-    @NotBlank(message = "email is required")
-    @Email
+    @Column(name="user_email")
     private String email;
 
-    public String getEmail() {
-        return email;
-    }
+    @ElementCollection(fetch= FetchType.EAGER)
+    @CollectionTable(
+            name="roles",
+            joinColumns = @JoinColumn(name="user_id")
+    )
+    @Column(name="user_role")
+    private List<String> roles;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -3,7 +3,6 @@ package com.hyperskill.accountservice.dtos;
 public class UserDTO {
     private Long id;
     private String name;
-    private String lastname;
     private String email;
 
     public Long getId() {
@@ -22,13 +21,6 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
 
     public String getEmail() {
         return email;
