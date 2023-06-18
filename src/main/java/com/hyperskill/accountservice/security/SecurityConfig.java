@@ -23,15 +23,18 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 @Configuration
 @EnableWebSecurity(debug=true)
 public class SecurityConfig {
+
     @Autowired
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    @Autowired
-    private UserDetailService userDetailsService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers( "/error/**"); // avoid returning always 401 Error
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -40,6 +43,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/empl/payment").permitAll()
                         .anyRequest().authenticated()
 
                 )
@@ -49,13 +53,5 @@ public class SecurityConfig {
         ;
 
         return http.build();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
     }
 }
