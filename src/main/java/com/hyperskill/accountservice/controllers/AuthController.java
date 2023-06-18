@@ -25,15 +25,14 @@ public class AuthController implements IAuthController {
     private UserService userService;
     @Autowired
     private ModelMapper modelMapper;
-
+    @Override
     @PostMapping("/signup")
     public ResponseEntity<?> addUser(@Validated @RequestBody User newUser){
         if(!this.userService.emailValidation(newUser.getEmail())){ //if email validation fails
             ErrorMessage.setErrorMsg("User exist!");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User exist!");
         }
         UserDTO userResponse = this.modelMapper.map(this.userService.addUser(newUser),UserDTO.class);
         return new ResponseEntity<UserDTO>(userResponse, HttpStatus.OK);
     }
-
 }

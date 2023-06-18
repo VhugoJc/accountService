@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository;
     public User addUser(User newUser){
@@ -18,13 +18,11 @@ public class UserService implements IUserService{
     @Override
     public boolean emailValidation(String email) {
         String domain = "@acme.com";
-        List<User> user =  userRepository.findByEmail(email);
+        List<User> user =  userRepository.findAllByEmail(email);
         if (user.size()!=0 || !email.contains(domain)){ // if the email exists or does not contain the domain
             return false;
         }else{
             return true;
         }
     }
-
-
 }
