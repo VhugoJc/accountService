@@ -3,6 +3,7 @@ package com.hyperskill.accountservice.services;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,23 @@ public class UserService implements IUserService, UserDetailsService {
     public User addUser(User newUser){
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        List<User> user = this.userRepository.findAllUsersByEmail(email);
+        return user.get(0);
+    }
+
+    public void emailValidation (String email){
+        List<User> userList = userRepository.findAllUsersByEmail(email);
+        String domain = "@acme.com";
+        if(userList.size()>0){ //if the user exists or does not match with the domain
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "user exist!");
+        }
+        if(!email.contains(domain)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"wrong domain");
+        }
     }
 
     @Override

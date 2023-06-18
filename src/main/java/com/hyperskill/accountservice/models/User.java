@@ -20,9 +20,13 @@ public class User {
     @Column(name="user_name")
     private String name;
 
+    @Column(name="user_lastname")
+    private String lastname;
+
     @Column(name="user_passwd")
     private String password;
 
+    @Email
     @Column(name="user_email")
     private String email;
 

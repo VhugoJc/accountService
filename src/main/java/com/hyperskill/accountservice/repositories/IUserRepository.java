@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByEmail(String email);
+    List<User> findAllUsersByEmail(String emai);
 }
