@@ -44,7 +44,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/empl/payment").hasAuthority("admin")
+                .requestMatchers(HttpMethod.GET,"/api/empl/payment").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()

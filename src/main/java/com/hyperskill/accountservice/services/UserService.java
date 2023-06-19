@@ -24,6 +24,8 @@ public class UserService implements IUserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     public User addUser(User newUser){
+        this.emailValidation(newUser.getEmail());
+        this.passwordValidation(newUser.getPassword());
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);
     }
@@ -34,7 +36,19 @@ public class UserService implements IUserService, UserDetailsService {
         return user.get(0);
     }
 
+    public void passwordValidation (String password){
+        String regrex = ".*password.*";
+        if(password.length()<12){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The password length must be at least 12 chars!");
+        }
+        if(password.toLowerCase().matches(regrex)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The password is in the hacker's database!");
+        }
+
+    }
+
     public void emailValidation (String email){
+
         List<User> userList = userRepository.findAllUsersByEmail(email);
         String domain = "@acme.com";
         if(userList.size()>0){ //if the user exists or does not match with the domain
@@ -48,7 +62,6 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> opt = userRepository.findUserByEmail(email);
-
         if (opt.isEmpty())
             throw new UsernameNotFoundException("User with email: " + email + " not found !");
         else {
