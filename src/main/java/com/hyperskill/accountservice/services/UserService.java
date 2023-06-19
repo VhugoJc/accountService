@@ -1,5 +1,6 @@
 package com.hyperskill.accountservice.services;
 
+import com.hyperskill.accountservice.dtos.ChangePassDTO;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class UserService implements IUserService, UserDetailsService {
         return user.get(0);
     }
 
-    public void passwordValidation (String password){
+    private void passwordValidation (String password){
         String regrex = ".*password.*";
         if(password.length()<12){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"The password length must be at least 12 chars!");
@@ -47,7 +48,7 @@ public class UserService implements IUserService, UserDetailsService {
 
     }
 
-    public void emailValidation (String email){
+    private void emailValidation (String email){
 
         List<User> userList = userRepository.findAllUsersByEmail(email);
         String domain = "@acme.com";
@@ -59,6 +60,23 @@ public class UserService implements IUserService, UserDetailsService {
         }
     }
 
+    public ChangePassDTO changePass(String email, String password){
+        List<User> userStored = this.userRepository.findAllUsersByEmail(email);
+
+        this.passwordValidation(password);//validate password security
+        System.out.println(userStored.get(0).getPassword());
+
+        if(passwordEncoder.matches(password, userStored.get(0).getPassword())){ //validate Old
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The passwords must be different!");
+        }
+        userStored.get(0).setPassword(passwordEncoder.encode(password));
+        this.userRepository.save(userStored.get(0));
+
+        ChangePassDTO response = new ChangePassDTO();
+        response.setEmail(email);
+        response.setStatus("The password has been updated successfully");
+        return response;
+    }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> opt = userRepository.findUserByEmail(email);
