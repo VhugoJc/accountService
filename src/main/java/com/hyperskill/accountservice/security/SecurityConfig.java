@@ -44,9 +44,12 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
-                .requestMatchers(HttpMethod.POST,"/api/acc/payment").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/empl/payment").authenticated()
                 .requestMatchers(HttpMethod.POST, "api/auth/changepass").authenticated()
+
+                .requestMatchers(HttpMethod.POST,"/api/acc/payment").permitAll()
+                .requestMatchers(HttpMethod.PUT,"/api/acc/payment").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/empl/payment").authenticated()
+
                 .anyRequest().denyAll()
                 .and()
                 .httpBasic()
