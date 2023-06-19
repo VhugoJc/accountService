@@ -2,15 +2,13 @@ package com.hyperskill.accountservice.controllers;
 
 import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.models.User;
+import com.hyperskill.accountservice.responses.StatusUserResponse;
 import com.hyperskill.accountservice.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.modelmapper.TypeToken;
 
 import java.lang.reflect.Type;
@@ -32,10 +30,11 @@ public class AdminController implements IAdminController{
         List<UserDTO> postDtoList = this.modelMapper.map(allUsersList,listType);
         return new ResponseEntity<>(postDtoList, HttpStatus.OK);
     }
-
+    @DeleteMapping("/user/{username}")
     @Override
-    public ResponseEntity<?> deleteUser(String username) {
-        return null;
+    public ResponseEntity<?> deleteUser(@PathVariable String username) {
+        StatusUserResponse response = this.userService.deleteUser(username);
+        return new ResponseEntity<StatusUserResponse>(response,HttpStatus.OK);
     }
 
     @Override

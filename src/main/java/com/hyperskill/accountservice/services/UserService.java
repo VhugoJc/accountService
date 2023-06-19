@@ -3,6 +3,7 @@ package com.hyperskill.accountservice.services;
 import com.hyperskill.accountservice.responses.ChangePassResponse;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
+import com.hyperskill.accountservice.responses.StatusUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -90,6 +91,19 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public StatusUserResponse deleteUser(String email) {
+        if(!userExist(email)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found!");
+        }
+        User userToDelete = this.getUserByEmail(email);
+        if(userToDelete.getRoles().contains("ROLE_ADMINISTRATOR")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't remove ADMINISTRATOR role!");
+        }
+        this.userRepository.delete(userToDelete);
+        return new StatusUserResponse(email,"Deleted successfully!");
     }
 
     @Override
