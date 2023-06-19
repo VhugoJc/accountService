@@ -4,6 +4,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.security.Principal;
 
-public interface IBusinessController {
+public interface IEmployeeController {
     public ResponseEntity<?> getPayrool(Principal principal);
 }

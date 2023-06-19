@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/empl")
-public class BusinessController implements IBusinessController {
+public class EmployeeController implements IEmployeeController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -28,5 +28,4 @@ public class BusinessController implements IBusinessController {
         UserDTO userResponse = modelMapper.map(userData,UserDTO.class);
         return new ResponseEntity<UserDTO>(userResponse, HttpStatus.ACCEPTED);
     }
-
 }

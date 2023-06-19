@@ -1,13 +1,12 @@
 package com.hyperskill.accountservice.controllers;
 
 
-import com.hyperskill.accountservice.dtos.ChangePassDTO;
-import com.hyperskill.accountservice.models.ChangePass;
+import com.hyperskill.accountservice.responses.ChangePassResponse;
+import com.hyperskill.accountservice.requests.ChangePassRequest;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.services.UserService;
 
-import lombok.Data;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,9 @@ public class AuthController implements IAuthController {
     }
     // POST api/auth/changepass
     @PostMapping("/changepass")
-    public ResponseEntity<?> updatePassword(@RequestBody ChangePass changePass, Principal principal) {
-        ChangePassDTO entityResponse = this.userService.changePass( principal.getName(), changePass.getNew_password());
-        return new ResponseEntity<ChangePassDTO>(entityResponse,HttpStatus.OK);
+    public ResponseEntity<?> updatePassword(@RequestBody ChangePassRequest changePassRequest, Principal principal) {
+        ChangePassResponse entityResponse = this.userService.changePass( principal.getName(), changePassRequest.getNew_password());
+        return new ResponseEntity<ChangePassResponse>(entityResponse,HttpStatus.OK);
     }
 
 }

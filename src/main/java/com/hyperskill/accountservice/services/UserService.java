@@ -1,6 +1,6 @@
 package com.hyperskill.accountservice.services;
 
-import com.hyperskill.accountservice.dtos.ChangePassDTO;
+import com.hyperskill.accountservice.responses.ChangePassResponse;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class UserService implements IUserService, UserDetailsService {
         }
     }
 
-    public ChangePassDTO changePass(String email, String password){
+    public ChangePassResponse changePass(String email, String password){
         List<User> userStored = this.userRepository.findAllUsersByEmail(email);
 
         this.passwordValidation(password);//validate password security
@@ -72,11 +72,21 @@ public class UserService implements IUserService, UserDetailsService {
         userStored.get(0).setPassword(passwordEncoder.encode(password));
         this.userRepository.save(userStored.get(0));
 
-        ChangePassDTO response = new ChangePassDTO();
+        ChangePassResponse response = new ChangePassResponse();
         response.setEmail(email);
         response.setStatus("The password has been updated successfully");
         return response;
     }
+
+    @Override
+    public boolean userExist(String email) {
+        List<User> userList = userRepository.findAllUsersByEmail(email);
+        if(userList.size()>0){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> opt = userRepository.findUserByEmail(email);

@@ -1,9 +1,9 @@
-package com.hyperskill.accountservice.dtos;
+package com.hyperskill.accountservice.responses;
 
 import lombok.Data;
 
 @Data
-public class ChangePassDTO {
+public class ChangePassResponse {
     private String email;
     private String status;
 }
