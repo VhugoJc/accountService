@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/api/acc/payment").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/empl/payment").authenticated()
 
+                .requestMatchers(HttpMethod.GET,"/api/admin/user").hasAuthority("ROLE_ADMINISTRATOR")
+
                 .anyRequest().denyAll()
                 .and()
                 .httpBasic()

@@ -88,6 +88,11 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> opt = userRepository.findUserByEmail(email);
         if (opt.isEmpty())
