@@ -43,21 +43,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+//        hasRole added 'ROLE' prefix automatically, hasAuthority no
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
-                .requestMatchers(HttpMethod.POST, "api/auth/changepass").authenticated()
+                .requestMatchers(HttpMethod.POST, "api/auth/changepass").hasAnyRole("ROLE_ADMINISTRATOR","USER","ACCOUNTANT")
 
-                .requestMatchers(HttpMethod.POST,"/api/acc/payment").permitAll()
-                .requestMatchers(HttpMethod.PUT,"/api/acc/payment").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/empl/payment").authenticated()
+                .requestMatchers(HttpMethod.GET,"/api/empl/payment").hasAnyRole("USER","ACCOUNTANT")
+                .requestMatchers(HttpMethod.POST,"/api/acc/payment").hasRole("ACCOUNTANT")
+                .requestMatchers(HttpMethod.PUT,"/api/acc/payment").hasRole("ACCOUNTANT")
 
-                .requestMatchers(HttpMethod.GET,"/api/admin/user").hasAuthority("ROLE_ADMINISTRATOR")
-                .requestMatchers(HttpMethod.DELETE,"/api/admin/user/{username}").hasAuthority("ROLE_ADMINISTRATOR")
-                .requestMatchers(HttpMethod.PUT,"/api/admin/user/role").hasAuthority("ROLE_ADMINISTRATOR")
-                .requestMatchers(HttpMethod.PUT,"/api/admin/user/access").hasAuthority("ROLE_ADMINISTRATOR")
+                .requestMatchers(HttpMethod.GET,"/api/admin/user").hasRole("ADMINISTRATOR")
+                .requestMatchers(HttpMethod.DELETE,"/api/admin/user/{username}").hasRole("ADMINISTRATOR")
+                .requestMatchers(HttpMethod.PUT,"/api/admin/user/role").hasRole("ADMINISTRATOR")
+                .requestMatchers(HttpMethod.PUT,"/api/admin/user/access").hasRole("ADMINISTRATOR")
 
-                .requestMatchers(HttpMethod.GET,"/api/security/events").hasAuthority("ROLE_AUDITOR")
+                .requestMatchers(HttpMethod.GET,"/api/security/events").hasAuthority("AUDITOR")
 
                 .anyRequest().denyAll()
                 .and()
