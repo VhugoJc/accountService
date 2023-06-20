@@ -55,6 +55,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/api/admin/user/role").hasAuthority("ROLE_ADMINISTRATOR")
                 .requestMatchers(HttpMethod.PUT,"/api/admin/user/access").hasAuthority("ROLE_ADMINISTRATOR")
 
+                .requestMatchers(HttpMethod.GET,"/api/security/events").hasAuthority("ROLE_AUDITOR")
+
                 .anyRequest().denyAll()
                 .and()
                 .httpBasic()
