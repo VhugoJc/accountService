@@ -42,13 +42,19 @@ public class AuthController implements IAuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> addUser(@Validated @RequestBody User newUser,  HttpServletRequest request){
         UserDTO userResponse = this.modelMapper.map(this.userService.addUser(newUser),UserDTO.class);
+
         this.logService.addLog(Event.CREATE_USER,"Anonymous",userResponse.getEmail(),request.getRequestURI());
+
         return new ResponseEntity<UserDTO>(userResponse, HttpStatus.OK);
     }
-    // POST api/auth/changepass
+
+    @Override
     @PostMapping("/changepass")
-    public ResponseEntity<?> updatePassword(@RequestBody ChangePassRequest changePassRequest, Principal principal) {
+    public ResponseEntity<?> updatePassword(@RequestBody ChangePassRequest changePassRequest, Principal principal, HttpServletRequest request) {
         ChangePassResponse entityResponse = this.userService.changePass( principal.getName(), changePassRequest.getNew_password());
+
+        this.logService.addLog(Event.CHANGE_PASSWORD,principal.getName(),principal.getName(),request.getRequestURI());
+
         return new ResponseEntity<ChangePassResponse>(entityResponse,HttpStatus.OK);
     }
 
