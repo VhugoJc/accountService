@@ -1,5 +1,6 @@
 package com.hyperskill.accountservice.services;
 
+import com.hyperskill.accountservice.requests.RoleRequest;
 import com.hyperskill.accountservice.responses.ChangePassResponse;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,6 +64,16 @@ public class UserService implements IUserService, UserDetailsService {
         }
     }
 
+    private void roleValidation(String role){
+        List<String> roles = new ArrayList<>();
+        roles.add("ROLE_ADMINISTRATOR");
+        roles.add("ROLE_USER");
+        roles.add("ROLE_ACCOUNTANT");
+
+        if(!roles.contains(role)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Role not found");
+        }
+    }
     public ChangePassResponse changePass(String email, String password){
         List<User> userStored = this.userRepository.findAllUsersByEmail(email);
 
@@ -104,6 +117,37 @@ public class UserService implements IUserService, UserDetailsService {
         }
         this.userRepository.delete(userToDelete);
         return new StatusUserResponse(email,"Deleted successfully!");
+    }
+
+    @Override
+    public User updateRole(RoleRequest roleData) {
+        if(!userExist(roleData.getUser())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!");
+        }
+        this.roleValidation(roleData.getRole());
+
+        User user = this.getUserByEmail(roleData.getUser());
+        switch(roleData.getOperation()){
+            case "GRANT":
+                if(!user.getRoles().contains(roleData.getRole())){
+                    LinkedList<String> roles = new LinkedList<>();
+                    roles.addAll(user.getRoles());
+                    roles.add(roleData.getRole());
+                    user.setRoles(roles);
+                    this.userRepository.save(user);
+                }
+                break;
+            case "REMOVE":
+                if(user.getRoles().contains(roleData.getRole())){
+                    LinkedList<String> roles = new LinkedList<>();
+                    roles.addAll(user.getRoles());
+                    roles.remove(roleData.getRole());
+                    user.setRoles(roles);
+                    this.userRepository.save(user);
+                }
+                break;
+        }
+        return user;
     }
 
     @Override

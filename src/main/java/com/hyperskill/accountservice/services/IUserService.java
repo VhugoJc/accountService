@@ -1,6 +1,7 @@
 package com.hyperskill.accountservice.services;
 
 import com.hyperskill.accountservice.models.User;
+import com.hyperskill.accountservice.requests.RoleRequest;
 import com.hyperskill.accountservice.responses.ChangePassResponse;
 import com.hyperskill.accountservice.responses.StatusUserResponse;
 
@@ -13,5 +14,5 @@ public interface IUserService {
     public boolean userExist(String email);
     public List<User> getAllUsers();
     public StatusUserResponse deleteUser(String email);
-
+    public User updateRole(RoleRequest roleData);
 }

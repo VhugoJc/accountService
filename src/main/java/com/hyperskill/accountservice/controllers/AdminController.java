@@ -2,6 +2,7 @@ package com.hyperskill.accountservice.controllers;
 
 import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.models.User;
+import com.hyperskill.accountservice.requests.RoleRequest;
 import com.hyperskill.accountservice.responses.StatusUserResponse;
 import com.hyperskill.accountservice.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -37,8 +38,11 @@ public class AdminController implements IAdminController{
         return new ResponseEntity<StatusUserResponse>(response,HttpStatus.OK);
     }
 
+    @PutMapping("/user/role")
     @Override
-    public ResponseEntity<?> updateUserRole() {
-        return null;
+    public ResponseEntity<?> updateUserRole(@RequestBody RoleRequest roleData) {
+        User updatedUser = this.userService.updateRole(roleData);
+        UserDTO userResponse = modelMapper.map(updatedUser,UserDTO.class);
+        return new ResponseEntity<UserDTO>(userResponse,HttpStatus.OK);
     }
 }
