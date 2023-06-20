@@ -185,8 +185,16 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public void updateUSer(User userToUpdate) {
+        this.userRepository.save(userToUpdate);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> opt = userRepository.findUserByEmail(email);
+        if(opt.get().isLocked()){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"user locked!");
+        }
         if (opt.isEmpty())
             throw new UsernameNotFoundException("User with email: " + email + " not found !");
         else {

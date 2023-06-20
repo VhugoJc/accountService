@@ -19,4 +19,6 @@ public interface IUserService {
     public User updateRole(RoleRequest roleData);
 
     public StatusResponse updateLocked(AccessRequest accessRequest);
+
+    public void updateUSer(User userToUpdate);
 }

@@ -30,6 +30,8 @@ public class SecurityConfig {
     @Autowired
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     @Autowired
+    RestAccessDeniedHandler restAccessDeniedHandler;
+    @Autowired
     private UserDetailsService uds;
 
     @Autowired
@@ -66,6 +68,8 @@ public class SecurityConfig {
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and()
+                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler)
                 .and()
                 .authenticationProvider(authenticationProvider());
         return http.build();
