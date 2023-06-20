@@ -253,6 +253,78 @@ Response body:
     "roles": ["ROLE_USER"]
 }
 ```
+## Logs Endpoint
+
+**Description**: This endpoint provides access to the system logs, which record various events and actions within the application.
+
+- **URL**: `/api/security/events`
+- **Method**: GET
+- **Role**: Auditor
+
+### Request
+
+No parameters are required for this endpoint.
+
+### Response
+
+The response will contain an array of log entries, each containing the following information:
+
+| Field        | Type   | Description                                          |
+|--------------|--------|------------------------------------------------------|
+| date         | string | The timestamp when the event occurred.               |
+| action       | string | The event name.                                      |
+| subject      | string | The user who performed the action.                   |
+| object       | string | The object on which the action was performed.        |
+| path         | string | The api path                                         |
+### Example
+
+**Request**:
+
+```JSON
+GET /api/security/events HTTP/1.1
+[
+{
+  "id" : 1,
+  "date" : "<date>",
+  "action" : "CREATE_USER",
+  "subject" : "Anonymous", \\ A User is not defined, fill with Anonymous
+  "object" : "johndoe@acme.com",
+  "path" : "/api/auth/signup"
+}, {
+  "id" : 6,
+  "date" : "<date>",
+  "action" : "LOGIN_FAILED",
+  "subject" : "maxmustermann@acme.com",
+  "object" : "/api/empl/payment", \\ the endpoint where the event occurred
+  "path" : "/api/empl/payment"
+}, {
+  "id" : 9,
+  "date" : "<date>",
+  "action" : "GRANT_ROLE",
+  "subject" : "johndoe@acme.com",
+  "object" : "Grant role ACCOUNTANT to petrpetrov@acme.com",
+  "path" : "/api/admin/user/role"
+}
+]
+````
+### Event Name Description
+The following table describes the event names and their corresponding events that can be logged in the system:
+
+| Description                                                | Event Name      |
+|------------------------------------------------------------|-----------------|
+| A user has been successfully registered                     | CREATE_USER     |
+| A user has changed the password successfully                | CHANGE_PASSWORD |
+| A user is trying to access a resource without access rights | ACCESS_DENIED   |
+| Failed authentication                                     | LOGIN_FAILED    |
+| A role is granted to a user                                | GRANT_ROLE      |
+| A role has been revoked                                   | REMOVE_ROLE     |
+| The Administrator has locked the user                      | LOCK_USER       |
+| The Administrator has unlocked a user                      | UNLOCK_USER     |
+| The Administrator has deleted a user                       | DELETE_USER     |
+| A user has been blocked on suspicion of a brute force attack | BRUTE_FORCE     |
+
+
+
 ## License
 Feel free to use, modify, and distribute this project as per the terms of the license.
 
