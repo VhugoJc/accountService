@@ -2,7 +2,9 @@ package com.hyperskill.accountservice.controllers;
 
 import com.hyperskill.accountservice.dtos.UserDTO;
 import com.hyperskill.accountservice.models.User;
+import com.hyperskill.accountservice.requests.AccessRequest;
 import com.hyperskill.accountservice.requests.RoleRequest;
+import com.hyperskill.accountservice.responses.StatusResponse;
 import com.hyperskill.accountservice.responses.StatusUserResponse;
 import com.hyperskill.accountservice.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.modelmapper.TypeToken;
 
 import java.lang.reflect.Type;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -44,5 +47,13 @@ public class AdminController implements IAdminController{
         User updatedUser = this.userService.updateRole(roleData);
         UserDTO userResponse = modelMapper.map(updatedUser,UserDTO.class);
         return new ResponseEntity<UserDTO>(userResponse,HttpStatus.OK);
+    }
+
+    @PutMapping("/user/access")
+    @Override
+    public ResponseEntity<?> updateUserAccess(@RequestBody AccessRequest accessRequest) {
+        StatusResponse response = this.userService.updateLocked(accessRequest);
+        return new ResponseEntity<StatusResponse>(response,HttpStatus.OK);
+
     }
 }

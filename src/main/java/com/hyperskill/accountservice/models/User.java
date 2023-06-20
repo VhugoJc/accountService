@@ -38,4 +38,9 @@ public class User {
     @Column(name="user_role")
     private List<String> roles;
 
+    @Column(name = "user_locked")
+    private boolean locked = false;
+
+    @Column(name = "failed_attempt")
+    private int failedAttempt = 0;
 }

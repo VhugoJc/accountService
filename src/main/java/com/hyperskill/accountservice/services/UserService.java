@@ -1,9 +1,11 @@
 package com.hyperskill.accountservice.services;
 
+import com.hyperskill.accountservice.requests.AccessRequest;
 import com.hyperskill.accountservice.requests.RoleRequest;
 import com.hyperskill.accountservice.responses.ChangePassResponse;
 import com.hyperskill.accountservice.models.User;
 import com.hyperskill.accountservice.repositories.IUserRepository;
+import com.hyperskill.accountservice.responses.StatusResponse;
 import com.hyperskill.accountservice.responses.StatusUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,9 +68,10 @@ public class UserService implements IUserService, UserDetailsService {
 
     private void roleValidation(String role){
         List<String> roles = new ArrayList<>();
-        roles.add("ROLE_ADMINISTRATOR");
         roles.add("ROLE_USER");
         roles.add("ROLE_ACCOUNTANT");
+        roles.add("ROLE_ADMINISTRATOR");
+        roles.add("ROLE_AUDITOR");
 
         if(!roles.contains(role)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Role not found");
@@ -146,8 +149,39 @@ public class UserService implements IUserService, UserDetailsService {
                     this.userRepository.save(user);
                 }
                 break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong operation!");
         }
         return user;
+    }
+
+    @Override
+    public StatusResponse updateLocked(AccessRequest accessRequest) {
+        System.out.println(accessRequest.getUser());
+        if(!this.userExist(accessRequest.getUser())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!");
+        }
+        User user = this.getUserByEmail(accessRequest.getUser());
+        StatusResponse response = new StatusResponse();
+
+        if(user.getRoles().contains("ROLE_ADMINISTRATOR")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't lock the Administrator");
+        }
+        switch (accessRequest.getOperation()){
+            case "LOCK":
+                user.setLocked(true);
+                response.setStatus("User "+accessRequest.getUser()+" locked");
+                this.userRepository.save(user);
+                break;
+            case "UNLOCK":
+                user.setLocked(false);
+                this.userRepository.save(user);
+                response.setStatus("User "+accessRequest.getUser()+" unlocked");
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong operation!");
+        }
+        return response;
     }
 
     @Override

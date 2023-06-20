@@ -4,11 +4,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class RoleRequest {
+public class AccessRequest {
     private String user;
-    private String role;
-    @Pattern(regexp = "GRANT|REMOVE", message = "Use only GRAND and REMOVE operations!")
+    @Pattern(regexp = "LOCK|UNLOCK", message = "Use only LOCK and UNLOCK operations!")
     private String operation;
 }
-
-
