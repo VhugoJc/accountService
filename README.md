@@ -101,7 +101,8 @@ Sample Request Body:
    "name": "Admin",
    "lastname": "Admin",
    "email": "admin@acme.com",
-   "password": "secret"
+   "password": "secret",
+   "roles":["ROLE_ADMINISTRATOR"]
 }
 ```
 Response body:
