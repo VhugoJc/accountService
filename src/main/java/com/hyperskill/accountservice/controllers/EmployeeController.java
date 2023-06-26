@@ -24,7 +24,7 @@ public class EmployeeController implements IEmployeeController {
     @Autowired
     private UserService userService;
 
-    //GET api/empl/payment
+    //Get payroll information for an employee.
     @GetMapping("/payment")
     public ResponseEntity<?> getPayrool(@RequestParam(required = false) String period,  Principal principal) {
         User employee = this.userService.getUserByEmail(principal.getName());

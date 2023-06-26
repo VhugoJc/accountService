@@ -14,6 +14,7 @@ public class LogService implements ILogService{
     @Autowired
     ILogRepository logRepository;
 
+    //Add a new log to the system.
     @Override
     public void addLog(Event eventName, String subject, String object, String path) {
         Log newLog = new Log();
@@ -24,6 +25,7 @@ public class LogService implements ILogService{
         this.logRepository.save(newLog);
     }
 
+    // Get all logs from the system.
     @Override
     public List<Log> getAllLogs() {
         return this.logRepository.findAll();

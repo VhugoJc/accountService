@@ -30,6 +30,7 @@ public class UserService implements IUserService, UserDetailsService {
     IUserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    // Add a new user to the system.
     public User addUser(User newUser){
         this.emailValidation(newUser.getEmail());
         this.passwordValidation(newUser.getPassword());
@@ -37,12 +38,14 @@ public class UserService implements IUserService, UserDetailsService {
         return userRepository.save(newUser);
     }
 
+    // Get a user by email.
     @Override
     public User getUserByEmail(String email) {
         List<User> user = this.userRepository.findAllUsersByEmail(email);
         return user.get(0);
     }
 
+    // Validate the password for security requirements.
     private void passwordValidation (String password){
         String regrex = ".*password.*";
         if(password.length()<12){
@@ -54,6 +57,7 @@ public class UserService implements IUserService, UserDetailsService {
 
     }
 
+    // Validate the email address format and domain.
     private void emailValidation (String email){
 
         List<User> userList = userRepository.findAllUsersByEmail(email);
@@ -66,6 +70,7 @@ public class UserService implements IUserService, UserDetailsService {
         }
     }
 
+    // Validate the role for existence.
     private void roleValidation(String role){
         List<String> roles = new ArrayList<>();
         roles.add("ROLE_USER");
@@ -77,6 +82,8 @@ public class UserService implements IUserService, UserDetailsService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Role not found");
         }
     }
+
+    // Change the user's password.
     public ChangePassResponse changePass(String email, String password){
         List<User> userStored = this.userRepository.findAllUsersByEmail(email);
 

@@ -43,6 +43,7 @@ public class PaymentService implements IPaymentService{
         return payment;
     }
 
+    // Check if a payment period already exists for an employee.
     private void periodPerEmployeeExist(String employee, Date period, int count){
         List<Payment> paymentsByEmployee = this.paymentRepository.findAllByEmployee(employee);
         for(Payment p: paymentsByEmployee){
@@ -53,6 +54,7 @@ public class PaymentService implements IPaymentService{
     }
 
 
+    // Add multiple payments to the system.
     @Override
     public StatusResponse addPayments(List<Payment> payments) {
         int count = 0;
@@ -81,6 +83,7 @@ public class PaymentService implements IPaymentService{
         return statusResponse ;
     }
 
+    // Update an existing payment.
     @Override
         public StatusResponse updatePayment(Payment payment) {
         if(!this.userService.userExist(payment.getEmployee())){ //if employee does not exist
@@ -97,6 +100,7 @@ public class PaymentService implements IPaymentService{
         return newResponse;
     }
 
+    // Get a payment for a specific period and employee.
     @Override
     public EmpPaymentResponse getPaymentByPeriod(String period, User employee) {
         List<Payment> paymentsEmployee = this.paymentRepository.findAllByEmployee(employee.getEmail());
@@ -132,6 +136,7 @@ public class PaymentService implements IPaymentService{
         return  new EmpPaymentResponse(employee.getName(), employee.getLastname(), periodResponse, salaryResponse);
     }
 
+    // Get all payments for a specific employee.
     @Override
     public List<EmpPaymentResponse> getAllPayments(User employee) {
         List<Payment> paymentsEmployee = this.paymentRepository.findAllByEmployee(employee.getEmail());

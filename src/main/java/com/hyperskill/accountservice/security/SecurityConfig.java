@@ -36,11 +36,14 @@ public class SecurityConfig {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    //Configure custom web security settings.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("error/**");
     }
 
+    // Configure the security filter chain.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //        hasRole added 'ROLE' prefix automatically, hasAuthority no
@@ -76,6 +79,7 @@ public class SecurityConfig {
 
     }
 
+    // Configure the authentication provider.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

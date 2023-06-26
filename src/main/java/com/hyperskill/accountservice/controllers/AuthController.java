@@ -38,6 +38,7 @@ public class AuthController implements IAuthController {
     private ModelMapper modelMapper;
 
 
+    // Add a new user.
     @Override
     @PostMapping("/signup")
     public ResponseEntity<?> addUser(@Validated @RequestBody User newUser,  HttpServletRequest request){
@@ -48,6 +49,7 @@ public class AuthController implements IAuthController {
         return new ResponseEntity<UserDTO>(userResponse, HttpStatus.OK);
     }
 
+    // Update user password.
     @Override
     @PostMapping("/changepass")
     public ResponseEntity<?> updatePassword(@RequestBody ChangePassRequest changePassRequest, Principal principal, HttpServletRequest request) {

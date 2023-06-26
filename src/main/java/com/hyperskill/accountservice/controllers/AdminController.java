@@ -32,6 +32,7 @@ public class AdminController implements IAdminController{
     @Autowired
     ModelMapper modelMapper;
 
+    // Get all users.
     @GetMapping("/user")
     @Override
     public ResponseEntity<?> getUsers() {
@@ -40,6 +41,8 @@ public class AdminController implements IAdminController{
         List<UserDTO> postDtoList = this.modelMapper.map(allUsersList,listType);
         return new ResponseEntity<>(postDtoList, HttpStatus.OK);
     }
+
+    // Delete a user.
     @DeleteMapping("/user/{username}")
     @Override
     public ResponseEntity<?> deleteUser(@PathVariable String username, Principal principal, HttpServletRequest request) {
@@ -48,6 +51,7 @@ public class AdminController implements IAdminController{
         return new ResponseEntity<StatusUserResponse>(response,HttpStatus.OK);
     }
 
+    // Update user role.
     @PutMapping("/user/role")
     @Override
     public ResponseEntity<?> updateUserRole(@RequestBody RoleRequest roleData,  Principal principal, HttpServletRequest request) {
@@ -63,6 +67,7 @@ public class AdminController implements IAdminController{
         return new ResponseEntity<UserDTO>(userResponse,HttpStatus.OK);
     }
 
+    // Update user access.
     @PutMapping("/user/access")
     @Override
     public ResponseEntity<?> updateUserAccess(@RequestBody AccessRequest accessRequest, Principal principal, HttpServletRequest request) {

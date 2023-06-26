@@ -10,11 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+/*
+  The SecurityController class handles security-related operations.
+  It provides endpoints for retrieving security logs.
+ */
+
 @RestController
 @RequestMapping("/api/security")
 public class SecurityController implements ISecurityController{
     @Autowired
     LogService logService;
+
+    //Retrieve all security logs.
     @Override
     @GetMapping("/events")
     public ResponseEntity<?> getLogs() {

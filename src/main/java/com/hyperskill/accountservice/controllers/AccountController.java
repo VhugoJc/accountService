@@ -19,16 +19,21 @@ public class AccountController {
     @Autowired
     PaymentService paymentService;
 
+    // Add multiple payments.
     @PostMapping("/payment")
     public ResponseEntity<?> addPayments(@Validated @RequestBody List<PaymentDTO> payments){
+        // Convert PaymentDTO objects to Payment entities using the paymentService.
         List<Payment> paymentsEntity = payments.stream()
                 .map(payment -> paymentService.convertDtoPaymentToEntity(payment))
                 .collect(Collectors.toList());
         StatusResponse response = this.paymentService.addPayments(paymentsEntity);
         return new ResponseEntity<StatusResponse>(response,HttpStatus.OK);
     }
+
+    // Update a payment.
     @PutMapping("/payment")
     public ResponseEntity<?> updatePayment(@Validated @RequestBody PaymentDTO paymentDTO){
+        // Convert PaymentDTO object to Payment entity using the paymentService.
         StatusResponse response = this.paymentService.updatePayment(this.paymentService.convertDtoPaymentToEntity(paymentDTO));
         return new ResponseEntity<StatusResponse>(response,HttpStatus.OK);
     }
